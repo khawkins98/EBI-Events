@@ -109,6 +109,18 @@ Handlebars.registerHelper("dateWithYear", function(date){
   return formatDate(date) + ' ' + dateAway.getFullYear();
 });
 
+//we want to show a ebi-topic terms
+Handlebars.registerHelper("ebiTopicTerm", function(data){
+  var ebi_topic_term;
+  $(data).each( function(i, term) {
+    ebi_topic_term = term.name;
+    console.log(term.name);
+  });
+  console.log('---');
+  return ebi_topic_term;
+  
+});
+
 // we want to show a start and end, a la: Oct 16th; Oct 12th-15th, Oct 21st - Nov 1st
 Handlebars.registerHelper("seminarDates", function(date1, date2){
   return formatDate(date1);
@@ -166,5 +178,9 @@ Handlebars.registerHelper('toLowerCase', function(passedString) {
   return passedString.toLowerCase();
 });
 
-
+Handlebars.registerHelper('escapeHtml', function(text) { 
+    text = Handlebars.Utils.escapeExpression(text);
+     
+    return new Handlebars.SafeString(text); 
+  });
 

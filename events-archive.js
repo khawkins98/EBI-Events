@@ -91,7 +91,7 @@
 
       var parsedData = { "nodes" : data };
 
-      console.log(data);
+      //console.log(data);
       
       $("#archived-events-content-placeholder").html(templateUpcomingEvents(parsedData));
 
@@ -119,7 +119,7 @@
         tokenSeparators: [",", " "]})        
       .on("change", function(e) {
         // mostly used event, fired to the original element when the value changes
-        // console.log("change val=" + e.val);
+         //console.log("change val=" + e.val);
         updateIncoming();
       })
 
@@ -129,37 +129,115 @@
         updateIncoming();
       });
 
-      $('#filter-buttons input').click(function(e){
+      // Target Content type
         // e.preventDefault();
         // eventType = $(this).data('value');
-        eventType = $(this).val();
+        var eventType = $(this).val();
+        var liveFilter = $("#livefilter").val();
 
-        if (eventType != 'reset') {
+        if (eventType != 'reset') {         
           // $('#upcoming-wraper input.filter').val($('#upcoming-wraper input.filter').val() + ' type:' + eventType);
-          $("#livefilter").val('type:'+eventType).trigger("change");
+          
+          
+          eventType = 'type:'+eventType;
+          // Append filter for year if sent as argument
+          if($("#livefilter").val().match(/(year)+:(\d{4})/) || $("#livefilter").val().match(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/)) {
+            if($("#livefilter").val().match(/(type)+:(\w)+(\s{0,1})+(\w)+/)) {
+              // Update type with incoming type
+              eventType = liveFilter.replace(/(type)+:(\w)+(\s{0,1})+(\w)+/g, eventType);
+              }
+            else {
+              // Append year if not in liveFilterbox
+              eventType = eventType + ',' + $("#livefilter").val();
+            }
+          }
+          
+          $("#livefilter").val(eventType).trigger("change");
         }
         else 
         {
+          eventType = liveFilter.replace(/,{0,1}(type)+:(\w)+(\s{0,1})+(\w)+/g, '');
+          eventType = eventType.replace(/^,/g, ''); // Remove comma if in first position
+          $("#livefilter").val(eventType).trigger("change");
           // reset filter
-          $("#livefilter").select2("val","").trigger("change");
+          //$("#livefilter").select2("val","").trigger("change");
           // $('#upcoming-wraper input.filter').val('');
         }
         updateIncoming();
       });
 
-      $('#filter-buttons select').on('change', '', function(e){
+      // Target EBI Topic
+      $("#filter-buttons input[name='ebi-topic']").click(function(e){
         // e.preventDefault();
         // eventType = $(this).data('value');
-        filterTag = $(this).val();
+        var eventTopic = $(this).val();
+        var liveFilter = $("#livefilter").val();
 
-        if (filterTag != 'select_a_year') {
+        if (eventTopic != 'reset') {          
           // $('#upcoming-wraper input.filter').val($('#upcoming-wraper input.filter').val() + ' type:' + eventType);
-          $("#livefilter").val('year:'+filterTag).trigger("change");
+          eventTopic = 'ebi-topic:'+ eventTopic;
+          // Append filter for year if sent as argument
+          if($("#livefilter").val().match(/(year)+:(\d{4})/) || $("#livefilter").val().match(/(type)+:(\w)+(\s{0,1})+(\w)+/)) {
+            if($("#livefilter").val().match(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/)) {
+              // Update type with incoming type
+              eventTopic = liveFilter.replace(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/g, eventTopic);
+              }
+            else {
+              // Append year if not in liveFilterbox
+              eventTopic = eventTopic + ',' + $("#livefilter").val();
+            }
+          }
+          
+          $("#livefilter").val(eventTopic).trigger("change");
         }
         else 
         {
           // reset filter
-          $("#livefilter").select2("val","").trigger("change");
+          eventTopic = liveFilter.replace(/,{0,1}(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/g, '');  // Remove topic filter if none is selected
+          eventTopic = eventTopic.replace(/^,/g, ''); // Remove comma if in first position
+          $("#livefilter").val(eventTopic).trigger("change");
+          //$("#livefilter").select2("val","").trigger("change");
+          // $('#upcoming-wraper input.filter').val('');
+        }
+        updateIncoming();
+      });
+      
+      // Target year
+      $('#filter-buttons select').on('change', '', function(e){
+        // e.preventDefault();
+        // eventType = $(this).data('value');
+        var filterTag = $(this).val();
+        var liveFilter = $("#livefilter").val(); 
+            
+        if (filterTag != 'select_a_year') {
+          // $('#upcoming-wraper input.filter').val($('#upcoming-wraper input.filter').val() + ' type:' + eventType);       
+          var yearPattern = '/(year)+:(\d{4})/';
+          var typePattern = '/(type)+:(\w)+(\s{0,1})+(\w)+/';         
+          var regex = new RegExp(typePattern, "g");
+
+          filterTag = 'year:'+filterTag;
+          // Append filter for content type if sent as argument
+          
+          if($("#livefilter").val().match(/(type)+:(\w)+(\s{0,1})+(\w)+/) || $("#livefilter").val().match(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/)) {
+            if($("#livefilter").val().match(/(year)+:(\d{4})/)) {
+              // Update year with incoming year
+              filterTag = liveFilter.replace(/(year)+:(\d{4})/g, filterTag);
+              }
+            else {
+              // Append year if not in liveFilterbox
+              filterTag = filterTag + ',' + $("#livefilter").val();
+            }
+          } 
+          $("#livefilter").val(filterTag).trigger("change");                    
+        }
+        else 
+        {
+          // reset filter
+          filterTag = liveFilter.replace(/,{0,1}(year)+:(\d{4})/g, '');  // Remove topic filter if none is selected
+          filterTag = filterTag.replace(/^,/g, ''); // Remove comma if in first position
+          $("#livefilter").val(filterTag).trigger("change");
+          
+          //$("#livefilter").select2("val","").trigger("change");
           // $('#upcoming-wraper input.filter').val('');
         }
         updateIncoming();
@@ -173,18 +251,18 @@
         // console.log(filter.selector);
         var filterArray = filter.selector.split(" "); // an array of what we're to search for
 
-        // console.log(filterArray.length);
-
         // console.log($(wrapper + ' ' + item + ':visible' ));
 
         $(wrapper + ' ' + item).each( function() { // search each entry
           var targetDiv = $(this);
+          
+          //console.log(targetDiv);
 
           $(filterArray).each( function() { // search for each term
 
             var individualSearchTerm = this;
             
-            if (individualSearchTerm.toLowerCase().indexOf('year:') >= 0) { // topic filter
+            if (individualSearchTerm.toLowerCase().indexOf('year:') >= 0) { // year filter
               individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "topic:"
               
               if ($(targetDiv).find('.event-date').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
@@ -193,7 +271,19 @@
                 $(targetDiv).hide();
                 return false; // aka break
               }
-            } else if (individualSearchTerm.toLowerCase().indexOf('type:') >= 0) { // topic filter
+            } 
+            else if (individualSearchTerm.toLowerCase().indexOf('ebi-topic:') >= 0) { // topic filter
+                individualSearchTerm = individualSearchTerm.toLowerCase().substring(10,200);
+
+                if ($(targetDiv).find('.event-ebi-topic').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
+                  $(targetDiv).show();
+                } else {
+                  $(targetDiv).hide();
+                  return false; // aka break
+                }
+                
+            }
+            else if (individualSearchTerm.toLowerCase().indexOf('type:') >= 0) { // type filter
               individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "topic:"
               
               if ($(targetDiv).find('.event-type').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
