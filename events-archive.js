@@ -130,119 +130,37 @@
       });
 
       // Target Content type
-        // e.preventDefault();
-        // eventType = $(this).data('value');
-        var eventType = $(this).val();
-        var liveFilter = $("#livefilter").val();
+      $('#filter-buttons input, #filter-buttons select').on('change', '', function(e){
+        var targetVal          = $(this).val(),
+            liveFilterType     = this.name,
+            liveFilterVal      = $("#livefilter").val(),
+            liveFilterNewValue = '';
 
-        if (eventType != 'reset') {         
-          // $('#upcoming-wraper input.filter').val($('#upcoming-wraper input.filter').val() + ' type:' + eventType);
-          
-          
-          eventType = 'type:'+eventType;
-          // Append filter for year if sent as argument
-          if($("#livefilter").val().match(/(year)+:(\d{4})/) || $("#livefilter").val().match(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/)) {
-            if($("#livefilter").val().match(/(type)+:(\w)+(\s{0,1})+(\w)+/)) {
-              // Update type with incoming type
-              eventType = liveFilter.replace(/(type)+:(\w)+(\s{0,1})+(\w)+/g, eventType);
-              }
-            else {
-              // Append year if not in liveFilterbox
-              eventType = eventType + ',' + $("#livefilter").val();
-            }
-          }
-          
-          $("#livefilter").val(eventType).trigger("change");
-        }
-        else 
-        {
-          eventType = liveFilter.replace(/,{0,1}(type)+:(\w)+(\s{0,1})+(\w)+/g, '');
-          eventType = eventType.replace(/^,/g, ''); // Remove comma if in first position
-          $("#livefilter").val(eventType).trigger("change");
-          // reset filter
-          //$("#livefilter").select2("val","").trigger("change");
-          // $('#upcoming-wraper input.filter').val('');
-        }
-        updateIncoming();
-      });
+        // Before we add a new token, remove all existing tokens for this type
+        // console.log('clearning for:',liveFilterType);
+        var regexQuery = new RegExp(',{0,1}('+liveFilterType+')+:(\\w)+(\\s{0,1})+(\\w)+', "g");
+        var targetValPurged = liveFilterVal.replace(regexQuery, '');
+        targetValPurged = targetValPurged.replace(/^,/g, ''); // Remove comma if in first position
 
-      // Target EBI Topic
-      $("#filter-buttons input[name='ebi-topic']").click(function(e){
-        // e.preventDefault();
-        // eventType = $(this).data('value');
-        var eventTopic = $(this).val();
-        var liveFilter = $("#livefilter").val();
+        // this is our search string with the old token removed
+        liveFilterNewValue = targetValPurged;
 
-        if (eventTopic != 'reset') {          
-          // $('#upcoming-wraper input.filter').val($('#upcoming-wraper input.filter').val() + ' type:' + eventType);
-          eventTopic = 'ebi-topic:'+ eventTopic;
-          // Append filter for year if sent as argument
-          if($("#livefilter").val().match(/(year)+:(\d{4})/) || $("#livefilter").val().match(/(type)+:(\w)+(\s{0,1})+(\w)+/)) {
-            if($("#livefilter").val().match(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/)) {
-              // Update type with incoming type
-              eventTopic = liveFilter.replace(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/g, eventTopic);
-              }
-            else {
-              // Append year if not in liveFilterbox
-              eventTopic = eventTopic + ',' + $("#livefilter").val();
-            }
-          }
-          
-          $("#livefilter").val(eventTopic).trigger("change");
+        if (targetVal != 'reset') {         
+          // Create the token, a ala: "year:2011"
+          targetVal = liveFilterType+':'+targetVal;
+          // Append the new token
+          liveFilterNewValue = targetVal + ',' + liveFilterNewValue;
         }
-        else 
-        {
-          // reset filter
-          eventTopic = liveFilter.replace(/,{0,1}(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/g, '');  // Remove topic filter if none is selected
-          eventTopic = eventTopic.replace(/^,/g, ''); // Remove comma if in first position
-          $("#livefilter").val(eventTopic).trigger("change");
-          //$("#livefilter").select2("val","").trigger("change");
-          // $('#upcoming-wraper input.filter').val('');
-        }
-        updateIncoming();
-      });
-      
-      // Target year
-      $('#filter-buttons select').on('change', '', function(e){
-        // e.preventDefault();
-        // eventType = $(this).data('value');
-        var filterTag = $(this).val();
-        var liveFilter = $("#livefilter").val(); 
-            
-        if (filterTag != 'select_a_year') {
-          // $('#upcoming-wraper input.filter').val($('#upcoming-wraper input.filter').val() + ' type:' + eventType);       
-          var yearPattern = '/(year)+:(\d{4})/';
-          var typePattern = '/(type)+:(\w)+(\s{0,1})+(\w)+/';         
-          var regex = new RegExp(typePattern, "g");
 
-          filterTag = 'year:'+filterTag;
-          // Append filter for content type if sent as argument
-          
-          if($("#livefilter").val().match(/(type)+:(\w)+(\s{0,1})+(\w)+/) || $("#livefilter").val().match(/(ebi-topic)+:([a-zA-Z0-9]*-){0,}[a-zA-Z0-9]*/)) {
-            if($("#livefilter").val().match(/(year)+:(\d{4})/)) {
-              // Update year with incoming year
-              filterTag = liveFilter.replace(/(year)+:(\d{4})/g, filterTag);
-              }
-            else {
-              // Append year if not in liveFilterbox
-              filterTag = filterTag + ',' + $("#livefilter").val();
-            }
-          } 
-          $("#livefilter").val(filterTag).trigger("change");                    
-        }
-        else 
-        {
-          // reset filter
-          filterTag = liveFilter.replace(/,{0,1}(year)+:(\d{4})/g, '');  // Remove topic filter if none is selected
-          filterTag = filterTag.replace(/^,/g, ''); // Remove comma if in first position
-          $("#livefilter").val(filterTag).trigger("change");
-          
-          //$("#livefilter").select2("val","").trigger("change");
-          // $('#upcoming-wraper input.filter').val('');
-        }
-        updateIncoming();
+        // Replace any double commas, or trailing commas
+        liveFilterNewValue = liveFilterNewValue.replace(/,+$/, "").replace(/,(?=,)/g, ',g');
+        // Update the text box
+        $("#livefilter").val(liveFilterNewValue).trigger("change");
+
 
       });
+
+
 
       function updateIncoming() {
         var inputString = $('#upcoming-wraper #s2id_livefilter').text().toLowerCase() + " " + $('.select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted').text().toLowerCase();
