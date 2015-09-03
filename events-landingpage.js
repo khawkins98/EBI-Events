@@ -85,6 +85,12 @@
       // invoke the keyword filter
       $('#upcoming-wraper').liveFilter('#upcoming-events-content-placeholder');
 
+      // Group the months together
+      var split_at = '#upcoming-wraper h3';
+      $(split_at).each(function() {
+        $(this).add($(this).nextUntil(split_at)).wrapAll("<div class='month-group'/>");
+      });
+
     });
 
     // This runs the keyword filter.
@@ -131,7 +137,7 @@
           $("#livefilter").select2("val","").trigger("change");
           // $('#upcoming-wraper input.filter').val('');
         }
-        updateIncoming();
+        // updateIncoming();
 
       });
 
@@ -155,28 +161,32 @@
               individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "topic:"
               
               if ($(targetDiv).find('.event-type').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
-                $(targetDiv).show();
+                $(targetDiv).removeClass('hidden');
               } else {
-                $(targetDiv).hide();
+                $(targetDiv).addClass('hidden');
                 return false; // aka break
               }
               
             } else if ($(targetDiv).text().toLowerCase().indexOf(individualSearchTerm) >= 0) { // normal search
-              $(targetDiv).show();
+              $(targetDiv).removeClass('hidden');
             } else { // no matches? you don't belong, go away
-              $(targetDiv).hide();
+              $(targetDiv).addClass('hidden');
               return false; // aka break
             }
           });
 
-          var eventsShownCount = $(item + ':visible').length;
-
-          // if (eventsShownCount < expandedEventDescriptionThreshold) {
-          //   $('.flyout.hidden').show();
-          // } else {
-          //   $('.flyout.hidden').hide();
-          // }
         });
+
+        // conditionally hide the month header
+        $('.month-group').each( function() { 
+          var countVisible = $(this).children('.upcoming-event').length - $(this).children('.upcoming-event.hidden').length; 
+          if (countVisible == 0) {
+            $(this).addClass('hidden');
+          } else {
+            $(this).removeClass('hidden');
+          }
+        });
+
       }
     }
 
@@ -188,7 +198,7 @@
 
     $.getJSON("/sites/ebi.ac.uk/files/data/events-featured-events-feed-featured-events.json", function(data) {
       var parsedData = { "nodes" : data };
-      console.log(data);
+      // console.log(data);
       $("#featured-events-content-placeholder").html(templateFeaturedEvents(parsedData));
     });
 
