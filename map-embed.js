@@ -11,13 +11,23 @@ if(!document.getElementById('map-address')) {
   google.maps.event.addDomListener(window, 'load', init);
 }
 
+// Utility function to check that the ID exists before loading
+function getInnerHtml(targetID) {
+  if (document.getElementById(targetID)) {
+    return document.getElementById(targetID).innerHTML;
+  } else {
+    return '';
+  }
+}
+
 function init() {
 
   var map,
-      title       = document.getElementById('map-name').innerHTML,
-      description = document.getElementById('map-description').innerHTML,
-      image       = document.getElementById('map-image').innerHTML,
-      address     = document.getElementById('map-address').innerHTML,
+      title       = getInnerHtml('map-name'),
+      description = getInnerHtml('map-description'),
+      image       = getInnerHtml('map-image'),
+      address     = getInnerHtml('map-address'),
+      room        = getInnerHtml('map-room'),
       // lat         = parseFloat(document.getElementById('map-lat').innerHTML);
       // lon         = parseFloat(document.getElementById('map-lon').innerHTML);
       mapLink     = 'https://www.google.com/maps?q=',
@@ -199,7 +209,7 @@ function init() {
     bindInfoWindow(marker, map, title, description, image);
 
     function bindInfoWindow(marker, map, title, desc, image) {
-      var html= "<div class='map-info-window'><div class='image-wrapper'><img src='"+image+"'/></div><p><a href='"+mapLink+"'><strong>"+title+"</strong> "+address+"</a><p></div>";
+      var html= "<div class='map-info-window'><div class='image-wrapper'><img src='"+image+"'/></div><p><a href='"+mapLink+"'><strong>"+room+"<br/>"+title+"</strong> "+address+"</a><p></div>";
       var infoWindowVisible = (function () {
         var currentlyVisible = false;
         return function (visible) {
