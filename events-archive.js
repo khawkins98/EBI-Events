@@ -129,7 +129,7 @@
         updateIncoming();
       });
 
-      // Target Content type
+      // Tokenise filter options
       $('#filter-buttons input, #filter-buttons select').on('change', '', function(e){
         var targetVal          = $(this).val(),
             liveFilterType     = this.name,
@@ -156,8 +156,6 @@
         liveFilterNewValue = liveFilterNewValue.replace(/,+$/, "").replace(/,(?=,)/g, ',g');
         // Update the text box
         $("#livefilter").val(liveFilterNewValue).trigger("change");
-
-
       });
 
 
@@ -219,15 +217,11 @@
             }
           });
 
-          // var eventsShownCount = $(item + ':visible').length;
-
-          // if (eventsShownCount < expandedEventDescriptionThreshold) {
-          //   $('.flyout.hidden').show();
-          // } else {
-          //   $('.flyout.hidden').hide();
-          // }
         });
+
+
       }
+
     }
 
 
