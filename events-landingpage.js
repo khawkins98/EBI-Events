@@ -93,103 +93,6 @@
 
     });
 
-    // This runs the keyword filter.
-    // High level: 
-    // - Splits the user's input into keyworks
-    // - event:syntax filters by event
-    var catgory = 'All',
-        filter = '',
-        expandedEventDescriptionThreshold = 5;
-
-    $.fn.liveFilter = function (wrapper) {
-
-      // strap the filter field as a select2 element
-      $("#livefilter").select2({
-        placeholder: "Filter by a keyword or two",
-        // allowClear: true,
-        tags:[""],
-        dropdownCssClass: "lifefilter-drop",
-        tokenSeparators: [",", " "]})        
-      .on("change", function(e) {
-        // mostly used event, fired to the original element when the value changes
-        // console.log("change val=" + e.val);
-        updateIncoming();
-      })
-
-      // var wrap = '#' + $(this).attr('id');
-      var item = '.upcoming-event';
-      $('#upcoming-wraper #s2id_livefilter').keyup(function () {
-        updateIncoming();
-      });
-
-      $('#filter-buttons input').click(function(e){
-        // e.preventDefault();
-        // eventType = $(this).data('value');
-        eventType = $(this).val();
-
-        if (eventType != 'reset') {
-          // $('#upcoming-wraper input.filter').val($('#upcoming-wraper input.filter').val() + ' type:' + eventType);
-          $("#livefilter").val('type:'+eventType).trigger("change");
-        }
-        else 
-        {
-          // reset filter
-          $("#livefilter").select2("val","").trigger("change");
-          // $('#upcoming-wraper input.filter').val('');
-        }
-        // updateIncoming();
-
-      });
-
-      function updateIncoming() {
-        var inputString = $('#upcoming-wraper #s2id_livefilter').text().toLowerCase() + " " + $('.select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted').text().toLowerCase();
-        // console.log(inputString);
-        filter = $(inputString);
-        // console.log(filter.selector);
-        var filterArray = filter.selector.split(" "); // an array of what we're to search for
-
-        // console.log(filterArray.length);
-
-        $(wrapper + ' ' + item ).each( function() { // search each entry
-          var targetDiv = $(this);
-
-          $(filterArray).each( function() { // search for each term
-
-            var individualSearchTerm = this;
-            
-            if (individualSearchTerm.toLowerCase().indexOf('type:') >= 0) { // topic filter
-              individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "topic:"
-              
-              if ($(targetDiv).find('.event-type').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
-                $(targetDiv).removeClass('hidden');
-              } else {
-                $(targetDiv).addClass('hidden');
-                return false; // aka break
-              }
-              
-            } else if ($(targetDiv).text().toLowerCase().indexOf(individualSearchTerm) >= 0) { // normal search
-              $(targetDiv).removeClass('hidden');
-            } else { // no matches? you don't belong, go away
-              $(targetDiv).addClass('hidden');
-              return false; // aka break
-            }
-          });
-
-        });
-
-        // conditionally hide the month header
-        $('.month-group').each( function() { 
-          var countVisible = $(this).children('.upcoming-event').length - $(this).children('.upcoming-event.hidden').length; 
-          if (countVisible == 0) {
-            $(this).addClass('hidden');
-          } else {
-            $(this).removeClass('hidden');
-          }
-        });
-
-      }
-    }
-
     // ----------------
     // Invoke the handlebars template for the featured events list
     // ----------------
@@ -236,13 +139,7 @@
         }
       }
     });
-    // $('#hero-unit .button a, #hero-unit h2 a').click(function(e){
-    //   e.preventDefault();
-    //   $('html, body').animate({
-    //     scrollTop: $( '#upcoming-wraper' ).offset().top - 100 // -100 pixels as a buffer
-    //   }, 500);
 
-    // });
 
   });
 }(jq111));  
