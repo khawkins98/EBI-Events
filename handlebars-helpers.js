@@ -142,6 +142,10 @@ Handlebars.registerHelper("smartEventsName", function(title){
     return title;
   }
 
+  if (!isset(this.speakers_list)) { // some seminars have no speaker data?
+    return title + '';
+  }
+
   if (!isset(this.speakers_list[0])) { // some seminars have no speaker data?
     return title + '';
   }
