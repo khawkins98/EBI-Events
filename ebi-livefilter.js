@@ -1,3 +1,7 @@
+// A text filter that also utilizes a tokenized string
+// Note: currently requires Select2, but that could be removed
+// Form elements should have a parent of #filter-buttons
+
 (function ($) {
   // This runs the keyword filter.
   // High level: 
@@ -72,10 +76,10 @@
               return false; // aka break
             }
           } 
-          else if (individualSearchTerm.toLowerCase().indexOf('ebi-topic:') >= 0) { // topic filter
+          else if (individualSearchTerm.toLowerCase().indexOf('topic:') >= 0) { // topic filter
               individualSearchTerm = individualSearchTerm.toLowerCase().substring(10,200);
 
-              if ($(targetDiv).find('.event-ebi-topic').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
+              if ($(targetDiv).find('.ebi-topic').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
                 $(targetDiv).removeClass('hidden');
               } else {
                 $(targetDiv).addClass('hidden');
@@ -83,7 +87,7 @@
               }
           }
           else if (individualSearchTerm.toLowerCase().indexOf('type:') >= 0) { // type filter
-            individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "topic:"
+            individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "type:"
             
             if ($(targetDiv).find('.event-type').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
               $(targetDiv).removeClass('hidden');
@@ -112,7 +116,6 @@
       });
 
     }
-
   }
 
 }(jq111));  

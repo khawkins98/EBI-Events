@@ -88,10 +88,7 @@
         return 0;
       });
 
-
       var parsedData = { "nodes" : data };
-
-      //console.log(data);
       
       $("#archived-events-content-placeholder").html(templateUpcomingEvents(parsedData));
 
@@ -99,26 +96,6 @@
       $('#upcoming-wraper').liveFilter('#archived-events-content-placeholder');
 
     });
-
-
-
-
-    // ----------------
-    // Smooth scroll anchor links
-    // ----------------
-    // $('a[href*=#]:not([href=#])').click(function() {
-    //   if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-    //     var target = $(this.hash);
-    //     target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-    //     if (target.length) {
-    //       $('html,body').animate({
-    //         scrollTop: target.offset().top - 100 // -100 pixels as a buffer
-    //       }, 700);
-    //       $(target).parent().parent().delay(1000).fadeTo(500, 0.5).fadeTo(500, 1); //flash it so the user sees it ...
-    //       return false;
-    //     }
-    //   }
-    // });
 
   });
 }(jq111));  
