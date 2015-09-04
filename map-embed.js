@@ -46,7 +46,7 @@ function init() { // init gmaps
   mapLink = (mapLink + title + " " + address).replace(/ /g , '+');
   document.getElementById('event-venue-link').innerHTML = '<a href="'+mapLink+'">View this map bigger</a>';
 
-  // intelegently make the image
+  // intelligently make the image
   var withImage = '';
   if (image != '') {
     image = "<div class='image-wrapper'><img src='" + image + "'/></div>";
