@@ -8,7 +8,7 @@
   }
   .gm-style-iw h4, .gm-style-iw p { margin: 0; padding: 0; }
   .gm-style-iw a { /*color: #fff;*/ }
-  .map-info-window.with-image { margin-top: 90px;  }
+  .map-info-window.with-image { margin-top: 100px;  }
   .map-info-window { margin-bottom: -12px; overflow: hidden;}
 
   .image-wrapper {

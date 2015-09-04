@@ -66,8 +66,6 @@
         $(filterArray).each( function() { // search for each term
           var individualSearchTerm = this;
 
-          // to do: make this programatic by auto detecting color, it's position and the desired match (topic, year, etc)
-
           var stingTermPosition = individualSearchTerm.indexOf(':');
 
           if (stingTermPosition >= 0) { // year filter 

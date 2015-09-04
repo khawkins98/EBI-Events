@@ -58,7 +58,7 @@
         $('#e1, #e2')
           .on("change", function(e) { 
             // alert('logic not yet implemented: where is the right URL home for EBI topics and general topics?')
-            window.location.href = "http://wwwdev.ebi.ac.uk/about/events/topic/"+e.val;
+            window.location.href = "http://www.ebi.ac.uk/about/events/topic/"+e.val;
             // console.log("change "+JSON.stringify({val:e.val, added:e.added, removed:e.removed})); 
           })
 
