@@ -65,42 +65,48 @@
 
         $(filterArray).each( function() { // search for each term
           var individualSearchTerm = this;
-          
-          if (individualSearchTerm.toLowerCase().indexOf('year:') >= 0) { // year filter
-            individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "topic:"
-            
-            if ($(targetDiv).find('.event-date').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
+
+          // to do: make this programatic by auto detecting color, it's position and the desired match (topic, year, etc)
+
+          var stingTermPosition = individualSearchTerm.indexOf(':');
+
+          if (stingTermPosition >= 0) { // year filter 
+            var searchSubject = individualSearchTerm.toLowerCase().substring(0,stingTermPosition); // get the matched search token, i.e. "topic"
+            individualSearchTerm = individualSearchTerm.toLowerCase().substring(stingTermPosition+1,100); // drop the "topic:"
+
+            // assign a css selector to search for based off the searchSubject
+            switch (searchSubject) {
+              case 'year':
+                searchSubject = '.event-date';
+                break;
+              case 'topic':
+                searchSubject = '.ebi-topic';
+                break;
+              case 'type':
+                searchSubject = '.event-'+searchSubject;
+                break;
+              default:
+                searchSubject = '.'+searchSubject;
+                break;
+            }
+
+            if ($(targetDiv).find(searchSubject).text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
               $(targetDiv).removeClass('hidden');
             } else {
               $(targetDiv).addClass('hidden');
               return false; // aka break
             }
           } 
-          else if (individualSearchTerm.toLowerCase().indexOf('topic:') >= 0) { // topic filter
-              individualSearchTerm = individualSearchTerm.toLowerCase().substring(10,200);
-
-              if ($(targetDiv).find('.ebi-topic').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
-                $(targetDiv).removeClass('hidden');
-              } else {
-                $(targetDiv).addClass('hidden');
-                return false; // aka break
-              }
-          }
-          else if (individualSearchTerm.toLowerCase().indexOf('type:') >= 0) { // type filter
-            individualSearchTerm = individualSearchTerm.toLowerCase().substring(5,100); // drop the "type:"
-            
-            if ($(targetDiv).find('.event-type').text().toLowerCase().indexOf(individualSearchTerm) >= 0)  { 
+          else {
+            // normal text search
+            if ($(targetDiv).text().toLowerCase().indexOf(individualSearchTerm) >= 0) { 
               $(targetDiv).removeClass('hidden');
-            } else {
+            } else { 
               $(targetDiv).addClass('hidden');
               return false; // aka break
             }
-          } else if ($(targetDiv).text().toLowerCase().indexOf(individualSearchTerm) >= 0) { // normal search
-            $(targetDiv).removeClass('hidden');
-          } else { // no matches? you don't belong, go away
-            $(targetDiv).addClass('hidden');
-            return false; // aka break
           }
+
         });
 
       });
