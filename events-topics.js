@@ -17,6 +17,10 @@
       return (obj.count > 0) ? true : false; 
     }
 
+    var pageLocation = window.location.pathname.split('/'); // where the heck are we?
+    pageLocation = pageLocation[1] + "/" + pageLocation[2]; // works for urls in the style of http://something.com/section/topic/querry-paramater
+
+
     // pull in the json list of topics and then strap select 2
     var jsonEbiTopics, jsonTopics;
     $.when(
@@ -61,7 +65,7 @@
         // redirect when user selects an item
         $('#e1, #e2')
           .on("change", function(e) { 
-            window.location.href = "http://www.ebi.ac.uk/about/events/topic/"+e.val;
+            window.location.href = "/"+pageLocation+"/"+e.val;
             $("#e1").select2("val", 'loading...'); // to do: add loading notification 
           })
 
@@ -112,9 +116,9 @@
         $("#livefilter").val('topic:' + queryTopic).trigger("change");
       }
 
-      queryTopic = queryTopic.replace(/-/g, ' ');
+      // queryTopic = queryTopic.replace(/-/g, ' ');
 
-      $('#content #breadcrumb p').append(' ' +queryTopic);
+      // $('#content #breadcrumb p').append(' ' +queryTopic);
       // $('#content h2').append(queryTopic);
 
 
@@ -122,11 +126,15 @@
 
     // Read a page's GET URL return the last path.
     function getTopicFromUrl() {
-      var urlPattern = new RegExp('\/about\/events\/topic\/', "g");
+      // var urlPattern = new RegExp('\/about\/events\/topic\/', "g");
+
+      var pageLocation = window.location.pathname.split('/'); // where the heck are we?
       var path = window.location.pathname.split('/');
-      var topic = path[path.length -1];
-  
-      return topic;
+      if (!pageLocation[3]) { 
+        return 'dna-rna'; // if the user doesn't give a third parameter, set one for them
+      } else {
+        return path[path.length -1];
+      }
     }
     
     // // Read a page's GET URL variables and return them as an associative array.
