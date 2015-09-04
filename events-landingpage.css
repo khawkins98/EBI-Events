@@ -486,26 +486,32 @@ body.page-about-events-archive .upcoming-event a .event-name { width: 50%; }
 body.page-about-events-archive #upcoming-wraper .filter.select2-container { width: 650px !important; }
 
 /* topic page */
+body.page-training-topic section>h2,
+body.page-training-topic #upcoming-wraper #s2id_livefilter,
 body.page-about-events-topic section>h2,
 body.page-about-events-topic #upcoming-wraper #s2id_livefilter {
   display: none;
 }
 
+body.page-training-topic #upcoming-wraper,
 body.page-about-events-topic #upcoming-wraper {
   margin: 0 1em 0;
   border-top: none;
   padding-top: 0;
 }
 
+body.page-training-topic .select2-choice,
 body.page-about-events-topic .select2-choice {
   padding: .2em .35em;
   position: relative;
   top: -2px;
 }
+body.page-training-topic .select2-search input, .select2-search-choice-close, .select2-container .select2-choice abbr, .select2-container .select2-choice .select2-arrow b,
 body.page-about-events-topic .select2-search input, .select2-search-choice-close, .select2-container .select2-choice abbr, .select2-container .select2-choice .select2-arrow b {
   background-position-y: 8px;
 }
 
+body.page-training-topic .select2-container .select2-choice > .select2-chosen,
 body.page-about-events-topic .select2-container .select2-choice > .select2-chosen {
   margin-top: 2px;
   overflow: visible;
