@@ -3,14 +3,13 @@
   .gm-style-iw {
     top: 0 !important;
     left: 0 !important;
-    min-height: 148px;
-/*    background-color: #0b7b7d;*/
     padding: 15px 37px 0 15px;
     width: 170px !important; 
   }
   .gm-style-iw h4, .gm-style-iw p { margin: 0; padding: 0; }
   .gm-style-iw a { /*color: #fff;*/ }
-  .map-info-window { margin-top: 100px; }
+  .map-info-window.with-image { margin-top: 90px;  }
+  .map-info-window { margin-bottom: -12px; overflow: hidden;}
 
   .image-wrapper {
     width: 222px;
@@ -34,8 +33,6 @@
 
   .gm-style-iw p {
     display: inline-block;
-    top: 15px;
-    position: relative;
   }
 
 

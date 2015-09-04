@@ -20,7 +20,7 @@ function getInnerHtml(targetID) {
   }
 }
 
-function init() {
+function init() { // init gmaps
 
   var map,
       title       = getInnerHtml('map-name'),
@@ -33,6 +33,7 @@ function init() {
       mapLink     = 'https://www.google.com/maps?q=',
       lat         = 0,
       lon         = 0,
+      latCompensation = 0.001,
       markericon  = '//178.62.84.82/dev/images/map-marker-hex-16.png';
 
   // clean up the formatting of the address
@@ -45,6 +46,13 @@ function init() {
   mapLink = (mapLink + title + " " + address).replace(/ /g , '+');
   document.getElementById('event-venue-link').innerHTML = '<a href="'+mapLink+'">View this map bigger</a>';
 
+  // intelegently make the image
+  var withImage = '';
+  if (image != '') {
+    image = "<div class='image-wrapper'><img src='" + image + "'/></div>";
+    withImage = " with-image";
+    latCompensation = 0.004;
+  } 
 
   // Geocode the address
   var geocoder = new google.maps.Geocoder();
@@ -71,7 +79,7 @@ function init() {
   function plotVenue() {
 
     var mapOptions = {
-      center: new google.maps.LatLng(lat+.004,lon), // increase lat to improve adjust map centering for info box
+      center: new google.maps.LatLng(lat+latCompensation,lon), // increase lat to improve adjust map centering for info box
       // center: new google.maps.Geocoder(),
       zoom: 15,
       zoomControl: true,
@@ -209,7 +217,7 @@ function init() {
     bindInfoWindow(marker, map, title, description, image);
 
     function bindInfoWindow(marker, map, title, desc, image) {
-      var html= "<div class='map-info-window'><div class='image-wrapper'><img src='"+image+"'/></div><p><a href='"+mapLink+"'><strong>"+room+"<br/>"+title+"</strong> "+address+"</a><p></div>";
+      var html= "<div class='map-info-window"+withImage+"'>"+image+"<p><a href='"+mapLink+"'><strong>"+room+"<br/>"+title+"</strong> "+address+"</a><p></div>";
       var infoWindowVisible = (function () {
         var currentlyVisible = false;
         return function (visible) {
